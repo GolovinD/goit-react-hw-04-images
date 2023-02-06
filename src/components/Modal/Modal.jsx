@@ -1,53 +1,54 @@
-import { Component } from "react";
-import PropTypes from 'prop-types';
+import { useEffect } from "react";
 import { createPortal } from "react-dom"
+import PropTypes from 'prop-types';
+
 import css from './Modal.module.css';
 
-const modalRoot = document.querySelector('#modal-root')
+const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
+function Modal({ largeImageURL, tags, onClose }) {
 
-    static propTypes = {
-        tags: PropTypes.number.isRequired,
-        largeImageURL: PropTypes.string.isRequired,
-    }
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeyDown);
+        return () => {
+           window.removeEventListener("keydown", handleKeyDown);
+        };
+    });
 
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    }
-
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleKeyDown);
-    }
-
-   handleKeyDown = event => {
-            if (event.code === 'Escape') {
-                this.props.onClose();
-            }
+    function handleKeyDown (event) {
+        if (event.code === 'Escape') {
+            onClose();
+        }
     }
     
-    handleBackdropClick = event => {
+    function handleBackdropClick (event) {
         if (event.target === event.currentTarget) {
-            this.props.onClose();
+            onClose();
         }
     }
 
-    render() {
-        const { largeImageURL, tags } = this.props;
-        console.log(largeImageURL);
+    // const { largeImageURL, tags } = this.props;
+    // console.log(largeImageURL);
 
-        return createPortal (
-            <div
-            className={css.Overlay}
-            onClick={this.handleBackdropClick}
-            >
-                <div className={css.Modal}>
-                    <img src={largeImageURL} alt={tags} />
-                </div>
-            </div>,
-            modalRoot,
-        )
-    }
+    return createPortal (
+        <div
+        className={css.Overlay}
+        onClick={handleBackdropClick}
+        >
+            <div className={css.Modal}>
+                <img
+                    src={largeImageURL}
+                    alt={tags}
+                />
+            </div>
+        </div>,
+        modalRoot,
+    )
 }
 
 export default Modal;
+
+Modal.propTypes = {
+    // tags: PropTypes.number.isRequired,
+    largeImageURL: PropTypes.string.isRequired,
+}

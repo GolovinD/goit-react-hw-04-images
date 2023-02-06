@@ -83,7 +83,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { status, error, searchData, largeImageURL, showModal } = this.state;
+    const { status, error, searchData, largeImageURL, showModal, tags } = this.state;
     
     return (
       <div className={css.app}>
@@ -111,6 +111,7 @@ class App extends React.Component {
         {showModal &&
           <Modal
             largeImageURL={largeImageURL}
+            tags={tags}
             onClose={this.toggleModal}
           />}        
             

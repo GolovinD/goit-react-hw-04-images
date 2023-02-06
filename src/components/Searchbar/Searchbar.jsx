@@ -1,51 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
+// import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import css from './Searchbar.module.css'
 
-class Searchbar extends React.Component {
+const Searchbar = ({ onSubmit }) => {
 
-    static propTypes = {
-        onSubmit: PropTypes.func.isRequired,
-    }    
-
-   state = {
-       searchQuery: '',
+   const [searchQuery, setSearchQuery]  = useState('')
+      
+    function handleChange (event) {
+        // console.log(event.currentTarget.value);
+        setSearchQuery(event.currentTarget.value);
     }
     
-    handleChange = event => {
-        const value = event.currentTarget.value;
-    // console.log(value);
-    this.setState({ searchQuery: value });
-    }
-    
-    handleSubmit = event => {
+    function handleSubmit (event) {
         event.preventDefault();
         // console.log(this.state);
-        const searchQueryNorm = this.state.searchQuery.toLowerCase();
+        const searchQueryNorm = searchQuery.toLowerCase();
         // console.log(searchQueryNorm);
         if (searchQueryNorm.trim() === '') {
             alert('Введіть запит');
             return;  
         }
-        this.props.onSubmit(searchQueryNorm)
-        this.setState({ searchQuery: '' });
+        onSubmit(searchQueryNorm)
+        setSearchQuery('');
     }
- 
-    render() {
     
         return (
             <div>
                <header className={css.searchbar}>
                     <form
                     className={css.form}
-                      onSubmit={this.handleSubmit}>
+                      onSubmit={handleSubmit}>
                   
                       <input
                         className={css.input}
                         type="text"
-                        value={this.state.searchQuery}  
-                        onChange={this.handleChange}    
+                        value={searchQuery}  
+                        onChange={handleChange}    
                         autocomplete="off"
                         placeholder="Search images and photos"
                         autofocus
@@ -54,7 +46,10 @@ class Searchbar extends React.Component {
                 </header>
             </div>
         )  
-    }
 }
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+    onSubmit: PropTypes.func.isRequired,
+}    
