@@ -33,7 +33,6 @@ function App() {
     setPage(1);
     };
     // console.log(this.state);
-  
 
   function loadMore() {
     setPage(prevPage => prevPage + 1)
@@ -53,12 +52,6 @@ function App() {
       return;
     };
 
-    // const prevSearch = prevSearchQuery;
-    // const nextSearch = searchQuery;
-    // const prevPage = prevPage;
-
-    // if (prevSearch !== nextSearch
-    //   || page !== prevPage) {
       setStatus('pending');
     
       pixabayApi(searchQuery, page)
