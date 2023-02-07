@@ -15,32 +15,15 @@ function App() {
   const [searchData, setSearchData] = useState([]);
   const [page, setPage] = useState(1);
   const [largeImageURL, setLargeImageURL] = useState('');
-  const [id, setId] = useState('');
+  // const [id, setId] = useState('');
   const [tags, setTags] = useState('');
   const [showModal, setShowModal] = useState(false);
   const [error, setError] = useState(null);
   const [status, setStatus] = useState('idle');
 
-//   state = {
-//     searchQuery: '',     
-//     searchData: [],
-//     page: 1,
-//     largeImageURL: '',
-//     id: '',
-//     tags: '',
-//     showModal: false,
-//     error: null,
-//     status: 'idle',
-// };
-
   function toggleModal() {
     setShowModal(!showModal);
     }
-  
-
-  //   const toggleModal = () => {
-  //   setShowModal(!showModal);
-  // };
   
   function handleFormSubmit (searchQuery) {
     // console.log(searchQuery);
@@ -53,7 +36,6 @@ function App() {
   
 
   function loadMore() {
-    // console.log('click!')
     setPage(prevPage => prevPage + 1)
     // console.log(page)
   };
@@ -62,8 +44,7 @@ function App() {
     setLargeImageURL(largeImageURL);
     setTags(tags);
     toggleModal();
-    // console.log('click photo');
-    // console.log(largeImageURL);
+     // console.log(largeImageURL);
   };
   
   useEffect(() => {
