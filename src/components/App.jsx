@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect }from 'react'
 
 import Searchbar from './Searchbar/Searchbar'
 import Loader from './Loader/Loader'
@@ -9,95 +9,104 @@ import pixabayApi from '../services/PixabayAPI'
 
 import css from './App.module.css'
 
-class App extends React.Component {
-
-  state = {
-    searchQuery: '',     
-    searchData: [],
-    page: 1,
-    largeImageURL: '',
-    id: '',
-    tags: '',
-    showModal: false,
-    error: null,
-    status: 'idle',
-};
-
-  toggleModal = () => {
-    this.setState(({ showModal }) => ({
-      showModal: !showModal,
-    }))
-  }
+function App() {
   
-  handleFormSubmit = searchQuery => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchData, setSearchData] = useState([]);
+  const [page, setPage] = useState(1);
+  const [largeImageURL, setLargeImageURL] = useState('');
+  const [id, setId] = useState('');
+  const [tags, setTags] = useState('');
+  const [showModal, setShowModal] = useState(false);
+  const [error, setError] = useState(null);
+  const [status, setStatus] = useState('idle');
+
+//   state = {
+//     searchQuery: '',     
+//     searchData: [],
+//     page: 1,
+//     largeImageURL: '',
+//     id: '',
+//     tags: '',
+//     showModal: false,
+//     error: null,
+//     status: 'idle',
+// };
+
+  function toggleModal() {
+    setShowModal(!showModal);
+    }
+  
+
+  //   const toggleModal = () => {
+  //   setShowModal(!showModal);
+  // };
+  
+  function handleFormSubmit (searchQuery) {
     // console.log(searchQuery);
 
-    this.setState({
-      searchQuery,
-      searchData: [],
-      page: 1,
-    });
+    setSearchQuery(searchQuery);
+    setSearchData([]);
+    setPage(1);
+    };
     // console.log(this.state);
-  }
+  
 
-  loadMore = () => {
+  function loadMore() {
     // console.log('click!')
-    this.setState(prevState => ({
-      page: prevState.page + 1,
-      
-    }))
-    // console.log(this.state.page)
+    setPage(prevPage => prevPage + 1)
+    // console.log(page)
   };
 
-  onImgClick = (largeImageURL, tags) => {
-    this.setState({ largeImageURL, tags });
-    this.toggleModal();
+  function onImgClick(largeImageURL, tags) {
+    setLargeImageURL(largeImageURL);
+    setTags(tags);
+    toggleModal();
     // console.log('click photo');
     // console.log(largeImageURL);
   };
   
-  componentDidUpdate(prevProps, prevState) {
-    const { searchQuery, page, searchData } = this.state;
-    const prevSearch = prevState.searchQuery;
-    const prevPage = prevState.page;
-    const nextSearch = searchQuery;
-    
-    if (prevSearch !== nextSearch
-           || page !== prevPage) {
-      // console.log('зміна пропів', nextSearch);
-      this.setState({
-        status: 'pending',
-      });
-      pixabayApi(nextSearch, page)
-        .then(data => { 
-        const { hits } = data
-        // console.log(data);
-        this.setState({
-          searchData: [...searchData, ...hits],
-            status: 'resolved'
-        })
-      })
-          
-      .catch(error => this.setState({ error, status: 'rejected' }));       
-    }
-  }
+  useEffect(() => {
 
-  render() {
-    const { status, error, searchData, largeImageURL, showModal, tags } = this.state;
+    if (!searchQuery) {
+      return;
+    };
+
+    // const prevSearch = prevSearchQuery;
+    // const nextSearch = searchQuery;
+    // const prevPage = prevPage;
+
+    // if (prevSearch !== nextSearch
+    //   || page !== prevPage) {
+      setStatus('pending');
     
+      pixabayApi(searchQuery, page)
+        .then(data => {
+          const { hits } = data
+          // console.log(data);
+          setSearchData(prevState => [...prevState, ...hits]);
+          setStatus('resolved');
+        })
+        .catch((error) => {
+          setError(error);
+          setStatus('rejected');
+        })
+    
+  }, [searchQuery, page])
+
     return (
       <div className={css.app}>
 
         <Searchbar
-          onSubmit={this.handleFormSubmit}
+          onSubmit={handleFormSubmit}
         />
         
         {status === 'rejected' &&
           <h1>{error.message}</h1>}
         
           <ImageGallery
-          searchData={this.state.searchData}
-          onImgClick={this.onImgClick}
+          searchData={searchData}
+          onImgClick={onImgClick}
         />
         
         {status === 'pending' &&
@@ -105,19 +114,18 @@ class App extends React.Component {
         
         {searchData.length > 0 &&
           <Button
-            onClick={this.loadMore}
+            onClick={loadMore}
           />}
 
         {showModal &&
           <Modal
             largeImageURL={largeImageURL}
             tags={tags}
-            onClose={this.toggleModal}
+            onClose={toggleModal}
           />}        
             
       </div>
     );
-  };
 }
 
 export default App;

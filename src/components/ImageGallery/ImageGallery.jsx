@@ -5,7 +5,9 @@ import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem'
 
 import css from './ImageGallery.module.css'
 
-const ImageGallery = ({ searchData, onImgClick })=> {
+const ImageGallery = ({ searchData, onImgClick }) => {
+  
+  
 
     return (
         <div>
@@ -13,7 +15,6 @@ const ImageGallery = ({ searchData, onImgClick })=> {
                 {searchData.map(({ id, webformatURL, largeImageURL, tags }) => (
                 <ImageGalleryItem
                     key={id}
-                    id={id}
                     webformatURL={webformatURL}
                     largeImageURL={largeImageURL}
                     tags={tags}    
@@ -32,6 +33,7 @@ ImageGallery.propTypes = {
       id: PropTypes.number.isRequired,
       webformatURL: PropTypes.string.isRequired,
       largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
     })
   ),
 };

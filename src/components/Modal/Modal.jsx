@@ -27,9 +27,6 @@ function Modal({ largeImageURL, tags, onClose }) {
         }
     }
 
-    // const { largeImageURL, tags } = this.props;
-    // console.log(largeImageURL);
-
     return createPortal (
         <div
         className={css.Overlay}
@@ -49,6 +46,6 @@ function Modal({ largeImageURL, tags, onClose }) {
 export default Modal;
 
 Modal.propTypes = {
-    // tags: PropTypes.number.isRequired,
+    tags: PropTypes.string.isRequired,
     largeImageURL: PropTypes.string.isRequired,
 }

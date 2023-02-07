@@ -31,9 +31,8 @@ const Searchbar = ({ onSubmit }) => {
                <header className={css.searchbar}>
                     <form
                     className={css.form}
-                      onSubmit={handleSubmit}>
-                  
-                      <input
+                    onSubmit={handleSubmit}>
+                        <input
                         className={css.input}
                         type="text"
                         value={searchQuery}  
@@ -41,7 +40,7 @@ const Searchbar = ({ onSubmit }) => {
                         autocomplete="off"
                         placeholder="Search images and photos"
                         autofocus
-                      />
+                        />
                     </form>
                 </header>
             </div>
